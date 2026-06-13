@@ -7,4 +7,5 @@ urlpatterns = [
     path('api/save/', views.save_dashboard, name='save_dashboard'),
     path('api/load/<str:month>/', views.load_dashboard, name='load_dashboard'),
     path('api/export/<int:plan_id>/', views.export_excel, name='export_excel'),
+    path('api/delete/<int:plan_id>/', views.delete_dashboard, name='delete_dashboard'),
 ]

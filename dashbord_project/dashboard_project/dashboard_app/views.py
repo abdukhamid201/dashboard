@@ -53,6 +53,16 @@ def dashboard(request, plan_id):
         'records_json': json.dumps(records),
     })
 
+@csrf_exempt
+@require_http_methods(["DELETE"])
+def delete_dashboard(request, plan_id):
+    try:
+        plan = get_object_or_404(MonthPlan, id=plan_id)
+        month = plan.month
+        plan.delete()
+        return JsonResponse({'status': 'ok', 'deleted_month': month})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
 @csrf_exempt
 @require_http_methods(["POST"])

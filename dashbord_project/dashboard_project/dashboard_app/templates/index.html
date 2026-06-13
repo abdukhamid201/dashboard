@@ -357,32 +357,42 @@
       <div class="plans-grid">
         {% for plan in plans %}
         <div class="plan-card">
-          <div class="plan-top">
-            <div>
-              <h3 class="plan-title">{{ plan.month }}</h3>
-              <div class="section-sub">Последнее обновление: {{ plan.updated_at|date:"d.m.Y H:i" }}</div>
-            </div>
-            <div class="pill">
-              <i data-lucide="calendar-days"></i>
-              <span>{{ plan.work_days }} дней</span>
-            </div>
-          </div>
-
-          <div class="plan-metrics">
-            <div class="metric-row">
-              <span class="label">План продаж</span>
-              <span class="value">{{ plan.plan_sales }}</span>
-            </div>
-            <div class="metric-row">
-              <span class="label">План лидов</span>
-              <span class="value">{{ plan.plan_leads }}</span>
-            </div>
-            <div class="metric-row">
-              <span class="label">Прошло дней</span>
-              <span class="value">{{ plan.passed_days }}</span>
-            </div>
-          </div>
-
+  <div class="plan-top">
+    <div>
+      <h3 class="plan-title">{{ plan.month }}</h3>
+      <div class="section-sub">Последнее обновление: {{ plan.updated_at|date:"d.m.Y H:i" }}</div>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <span>{{ plan.work_days }} дней</span>
+    </div>
+  </div>
+  <div class="plan-metrics">
+    <div class="metric">
+      <span class="label">План продаж</span>
+      <span class="value">{{ plan.plan_sales }}</span>
+    </div>
+    <div class="metric">
+      <span class="label">План лидов</span>
+      <span class="value">{{ plan.plan_leads }}</span>
+    </div>
+    <div class="metric">
+      <span class="label">Прошло дней</span>
+      <span class="value">{{ plan.passed_days }}</span>
+    </div>
+  </div>
+  <div style="display:flex; gap:8px; margin-top:12px;">
+    <a href="{% url 'dashboard' plan.id %}" class="app-btn app-btn-primary" style="flex:1; text-align:center;">
+      Открыть
+    </a>
+    <button
+      class="app-btn"
+      style="background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:8px 14px; border-radius:8px; cursor:pointer;"
+      onclick="deletePlan({{ plan.id }}, '{{ plan.month }}')"
+    >
+      <i data-lucide="trash-2" style="width:16px;height:16px;"></i>
+    </button>
+  </div>
+</div>
           <a href="{% url 'dashboard' plan.id %}" class="app-btn app-btn-primary">
             <i data-lucide="arrow-up-right"></i>
             <span>Открыть дашборд</span>
@@ -444,6 +454,34 @@
   const plansData = JSON.parse(
     document.getElementById('plans-data')?.textContent || '[]'
   );
+
+  function deletePlan(planId, month) {
+  if (!confirm(`Удалить месяц ${month}? Все данные будут потеряны.`)) return;
+
+  fetch(`/api/delete/${planId}/`, {
+    method: 'DELETE',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken')
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === 'ok') {
+      showToast(`Месяц ${data.deleted_month} удалён`);
+      setTimeout(() => location.reload(), 800);
+    } else {
+      showToast('Ошибка удаления: ' + data.message);
+    }
+  })
+  .catch(() => showToast('Ошибка сети'));
+}
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return '';
+}
 
   function renderMonthsChart() {
     const chartEl = document.getElementById('monthsComparisonChart');
