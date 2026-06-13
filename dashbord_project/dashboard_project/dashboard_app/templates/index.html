@@ -387,7 +387,7 @@
     <button
       class="app-btn"
       style="background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:8px 14px; border-radius:8px; cursor:pointer;"
-      onclick="deletePlan({{ plan.id }}, '{{ plan.month }}')"
+      onclick="deletePlan('{{ plan.id }}', '{{ plan.month }}')"
     >
       <i data-lucide="trash-2" style="width:16px;height:16px;"></i>
     </button>
@@ -398,6 +398,7 @@
         <p style="margin:0;">Создайте первый месяц через форму ниже.</p>
       </div>
       {% endif %}
+      {% endfor %}
     </section>
     <section class="section-card">
   <div class="section-head">
