@@ -337,7 +337,7 @@
       
     </section>
 
-    <section class="section-card">
+    <section class="section-card" id="newPlanSection">
       <div class="section-head">
         <div>
           <div class="section-title">
@@ -347,10 +347,10 @@
           <p class="section-sub">Откройте существующий план или создайте новый период ниже.</p>
         </div>
 
-       <a href="/dashboard/1/" class="app-btn app-btn-primary">
-            <i data-lucide="plus"></i>
-            <span>Новый месяц</span>
-        </a>
+       <a href="#newPlanSection" class="app-btn app-btn-primary" onclick="document.getElementById('newPlanSection').scrollIntoView({behavior:'smooth'})">
+  <i data-lucide="plus"></i>
+  <span>Новый месяц</span>
+</a> 
       </div>
 
       {% if plans %}
@@ -393,18 +393,7 @@
     </button>
   </div>
 </div>
-          <a href="{% url 'dashboard' plan.id %}" class="app-btn app-btn-primary">
-            <i data-lucide="arrow-up-right"></i>
-            <span>Открыть дашборд</span>
-          </a>
-        </div>
-        {% endfor %}
-      </div>
-      {% else %}
-      <div class="empty-box">
-        <div style="display:flex; justify-content:center; margin-bottom:10px; color:var(--primary);">
-          <i data-lucide="inbox"></i>
-        </div>
+          
         <h4 style="margin:0 0 8px; color:var(--text); font-weight:800;">Пока нет сохранённых планов</h4>
         <p style="margin:0;">Создайте первый месяц через форму ниже.</p>
       </div>
